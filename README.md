@@ -13,10 +13,8 @@
 Silberschatz, Henry F. Korth, S. Sudarshan 저)의 **University Database** 예제를 기반으로 하고 있습니다.
 
 - **Schema Source:** *Database System Concepts (7th Edition)* Appendix A.
-- **Purpose:** 본 프로젝트는 해당 스키마를 실제 RDBMS(MySQL)와 ORM(JPA) 환경에서 구현하고 최적화하는 과정을 연구하기 위한 **교육 및 비상업적 목적
-  **으로 개발되었습니다.
-- **Data Notice:** 저작권 준수를 위해 교재 내부의 구체적인 데이터 값은 사용하지 않았으며, 모든 데이터는 더미 데이터 생성기(Faker)를 통해 무작위
-  생성되었습니다.
+- **Purpose:** 본 프로젝트는 해당 스키마를 실제 RDBMS(MySQL)와 ORM(JPA) 환경에서 구현하고 최적화하는 과정을 연구하기 위한 **교육 및 비상업적 목적**으로 개발되었습니다.
+- **Data Notice:** 저작권 준수를 위해 교재 내부의 구체적인 데이터 값은 사용하지 않았으며, 모든 데이터는 더미 데이터 생성기(Faker)를 통해 무작위 생성되었습니다.
 
 ---
 
@@ -52,4 +50,4 @@ docker-compose up --build -d
 
 - **이름:** 함상현
 - **학과:** 서울신학대학교 일반대학원 IT융합학과
-- **Contact:** hhak3504@stu.ac.kr
+- **이메일:** hhak3504@stu.ac.kr
