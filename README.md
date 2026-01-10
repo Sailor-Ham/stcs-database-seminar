@@ -1,22 +1,21 @@
-# <img src="docs/images/stu_logo.png" height="40" align="left">&nbsp;서울신학대학교 일반대학원 IT융합학과 데이터베이스 세미나<br clear="left"/>
+# <img src="docs/images/stu_logo.png" height="40" align="left">서울신학대학교 일반대학원 IT융합학과 데이터베이스 세미나<br clear="left"/>
 
-## 📘 Project: University Database System Implementation
+## 📘 프로젝트: **데이터베이스 시스템 세미나** 교재 DB 구현
 
-이 프로젝트는 **데이터베이스 시스템 세미나** 수업의 연구 및 실습을 위해 구축된 백엔드 애플리케이션입니다.  
-표준적인 대학 학사 관리 시스템을 모델링하며, 대용량 트래픽 처리 및 쿼리 최적화 연구를 위한 베이스라인으로 사용됩니다.
+이 프로젝트는 **데이터베이스 시스템 세미나** 수업의 연구 및 실습을 위해 구축된 백엔드 애플리케이션입니다.
 
 ---
 
 ### ⚖️ 출처 및 참고
 
 본 프로젝트의 데이터베이스 스키마(Schema) 구조는 데이터베이스 분야의 표준 교재인 **[Database System Concepts]** (Abraham
-Silberschatz, Henry F. Korth, S. Sudarshan 저)의 **University Database** 예제를 기반으로 하고 있습니다.
+Silberschatz, Henry F. Korth, S. Sudarshan 저)의 **University Database** 예제를 기반으로 구현되었습니다.
 
-- **Schema Source:** *Database System Concepts (7th Edition)* Appendix A.
-- **Purpose:** 본 프로젝트는 해당 스키마를 실제 RDBMS(MySQL)와 ORM(JPA) 환경에서 구현하고 최적화하는 과정을 연구하기 위한
-  **교육 및 비상업적 목적**으로 개발되었습니다.
-- **Data Notice:** 저작권 준수를 위해 교재 내부의 구체적인 데이터 값은 사용하지 않았으며, 모든 데이터는 더미 데이터 생성기(Faker)를 통해 무작위
-  생성되었습니다.
+- **Schema Source:** *Database System Concepts (7th Edition)* Official Resources.
+- **Purpose:** 본 프로젝트는 저자가 공식 제공하는 **Large Relations Dataset** (`largeRelationsInsertFile.sql`)과
+  **DDL Script**를 MySQL에 맞춰 사용하였습니다.
+- **License Notice:** 해당 데이터셋과 스키마 구조는 오직 **교육, 연구 및 세미나 실습 목적**으로만 사용됩니다.
+- **Official Website:** [db-book.com](https://www.db-book.com/)
 
 ---
 
@@ -51,6 +50,9 @@ MYSQL_DATABASE=stcs_db
 MYSQL_ROOT_PASSWORD=rootpassword
 MYSQL_USER=stcs_user
 MYSQL_PASSWORD=stcs_password
+MYSQL_GUEST_USER=guestUser
+MYSQL_GUEST_PASSWORD=GuestPassword000!
+DB_HOST=localhost
 ```
 
 ---
@@ -60,6 +62,8 @@ MYSQL_PASSWORD=stcs_password
 #### **사전 요구 사항**
 
 - Docker & Docker Compose
+- **Data Initialization:** `src/main/resources/data.sql` 위치에 교재의
+  `lareRelationsInsertFile.sql` 내용이 포함되어 있어야 서버 실행 시 데이터가 적재됩니다.
 
 #### 전체 시스템 실행
 
@@ -83,7 +87,7 @@ docker-compose -f docker-compose-dev.yml up -d db-seminar
 
 ## 🗄️ 데이터베이스 스키마 (ERD)
 
-**Korth의 University Database** 예제를 기반으로 설계되었습니다.
+**Korth의 University Database** 공식 스키마를 기반으로 설계되었습니다.
 
 복합 키(Composite Key)와 순환 참조 관계를 명확히 시각화하기 위해 DBML을 사용하여 모델링하였습니다.
 
@@ -205,7 +209,7 @@ Ref: teaches.(course_id, sec_id, semester, year) > section.(course_id, sec_id, s
 
 ---
 
-## <img src="docs/images/sailorham_logo.png" height="24" align="left">&nbsp; 작성자<br clear="left"/>
+## <img src="docs/images/sailorham_logo.png" height="24" align="left">작성자<br clear="left"/>
 
 - **이름:** 함상현
 - **학과:** 서울신학대학교 일반대학원 IT융합학과
