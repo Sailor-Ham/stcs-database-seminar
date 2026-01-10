@@ -95,134 +95,110 @@ docker-compose -f docker-compose-dev.yml up -d db-seminar
 <br>
 
 ```groovy
-Table department
-{
-    dept_name VARCHAR(20)[primary key, note: '학과명']
-    building VARCHAR(15)[not null, note: '건물명']
-    budget DECIMAL(12, 2)[not null, note: '학과예산']
+Table department {
+  dept_name VARCHAR(20) [primary key, note: '학과명']
+  building VARCHAR(15) [not null, note: '건물명']
+  budget DECIMAL(12, 2) [not null, note: '학과예산']
 }
 
-Table instructor
-{
-    instructor_id VARCHAR(5)[primary key, note: '교수 ID']
-    name VARCHAR(20)[not null, note: '교수명']
-    dept_name VARCHAR(20)[note: '학과명(FK)']
-    salary DECIMAL(8, 2)[note: '월급']
+Table instructor {
+  instructor_id VARCHAR(5) [primary key, note: '교수 ID']
+  name VARCHAR(20) [not null, note: '교수명']
+  dept_name VARCHAR(20) [default: null, note: '학과명(FK)']
+  salary DECIMAL(8, 2) [default: 0, note: '월급']
 }
 
-Table student
-{
-    student_id VARCHAR(5)[primary key, note: '학생 ID']
-    name VARCHAR(20)[not null, note: '학생명']
-    dept_name VARCHAR(20)[note: '학과명(FK)']
-    tot_cred DECIMAL(3, 0)[note: '총 이수 학점']
+Table student {
+  student_id VARCHAR(5) [primary key, note: '학생 ID']
+  name VARCHAR(20) [not null, note: '학생명']
+  dept_name VARCHAR(20) [default: null, note: '학과명(FK)']
+  tot_cred DECIMAL(3, 0) [default: 0, note: '총 이수 학점']
 }
 
-Table course
-{
-    course_id VARCHAR(8)[primary key, note: '강의 ID']
-    title VARCHAR(50)[note: '강의명']
-    dept_name VARCHAR(20)[note: '학과명(FK)']
-    credits DECIMAL(2, 0)[note: '학점']
+Table course {
+  course_id VARCHAR(8) [primary key, note: '강의 ID']
+  title VARCHAR(50) [note: '강의명']
+  dept_name VARCHAR(20) [default: null, note: '학과명(FK)']
+  credits DECIMAL(2, 0) [default: 0, note: '학점']
 }
 
-Table advisor
-{
-    s_id VARCHAR(5)[primary key, note: '학생 ID(FK) - 1:1 관계']
-    i_id VARCHAR(5)[not null, note: '교수 ID(FK)']
+Table advisor {
+  s_id VARCHAR(5) [primary key, note: '학생 ID(FK) - 1:1 관계']
+  i_id VARCHAR(5) [default: null, note: '교수 ID(FK)']
 }
 
-Table prereq
-{
-    course_id VARCHAR(8)[primary key, note: '강의 ID(FK)']
-    prereq_id VARCHAR(8)[primary key, note: '선수 과목 ID(FK)']
+Table prereq {
+  course_id VARCHAR(8) [primary key, note: '강의 ID(FK)']
+  prereq_id VARCHAR(8) [primary key, note: '선수 과목 ID(FK)']
 }
 
-Table time_slot
-{
-    time_slot_id VARCHAR(4)[primary key, note: '수업 교시 ID']
-    day VARCHAR(1)[primary key, note: '요일']
-    start_time TIME[primary key, note: '시작 시간']
-    end_time TIME[not null, note: '종료 시간']
+Table time_slot {
+  time_slot_id VARCHAR(4) [primary key, note: '수업 교시 ID']
+  day VARCHAR(1) [primary key, note: '요일']
+  start_time TIME [primary key, note: '시작 시간']
+  end_time TIME [not null, note: '종료 시간']
 }
 
-Table classroom
-{
-    building VARCHAR(15)[primary key, note: '건물명']
-    room_number VARCHAR(7)[primary key, note: '강의실 번호']
-    capacity DECIMAL(4, 0)[not null, note: '수용 인원']
+Table classroom {
+  building VARCHAR(15) [primary key, note: '건물명']
+  room_number VARCHAR(7) [primary key, note: '강의실 번호']
+  capacity DECIMAL(4, 0) [default: 0, note: '수용 인원']
 }
 
-Table section
-{
-    course_id VARCHAR(8)[primary key, note: '강의 ID(FK)']
-    sec_id VARCHAR(8)[primary key, note: '분반 ID']
-    semester VARCHAR(6)[primary key, note: '학기']
-    year DECIMAL(4, 0)[primary key, note: '년도']
+Table section {
+  course_id VARCHAR(8) [primary key, note: '강의 ID(FK)']
+  sec_id VARCHAR(8) [primary key, note: '분반 ID']
+  semester VARCHAR(6) [primary key, note: '학기']
+  year DECIMAL(4, 0) [primary key, note: '년도']
 
-    building VARCHAR(15)[note: '건물명(FK)']
-    room_number VARCHAR(7)[note: '강의실 번호(FK)']
-    time_slot_id VARCHAR(4)[note: '수업 교시 ID (논리적 참조)']
+  building VARCHAR(15) [default: null, note: '건물명(FK)']
+  room_number VARCHAR(7) [default: null, note: '강의실 번호(FK)']
+  time_slot_id VARCHAR(4) [default: null, note: '수업 교시 ID (논리적 참조)']
 }
 
-Table takes
-{
-    student_id VARCHAR(5)[primary key, note: '학생 ID']
+Table takes {
+  student_id VARCHAR(5) [primary key, note: '학생 ID']
 
-    // Section 복합키 참조
-    course_id VARCHAR(8)[primary key, note: '강의 ID']
-    sec_id VARCHAR(8)[primary key, note: '분반 ID']
-    semester VARCHAR(6)[primary key, note: '학기']
-    year DECIMAL(4, 0)[primary key, note: '년도']
+  // Section 복합키 참조
+  course_id VARCHAR(8) [primary key, note: '강의 ID']
+  sec_id VARCHAR(8) [primary key, note: '분반 ID']
+  semester VARCHAR(6) [primary key, note: '학기']
+  year DECIMAL(4, 0) [primary key, note: '년도']
 
-    grade VARCHAR(2)[note: '성적 (A+, B...)']
+  grade VARCHAR(2) [default: null, note: '성적 (A+, B...)']
 }
 
-Table teaches
-{
-    instructor_id VARCHAR(5)[primary key, note: '교수 ID']
+Table teaches {
+  instructor_id VARCHAR(5) [primary key, note: '교수 ID']
 
-    // Section 복합키 참조
-    course_id VARCHAR(8)[primary key, note: '강의 ID']
-    sec_id VARCHAR(8)[primary key, note: '분반 ID']
-    semester VARCHAR(6)[primary key, note: '학기']
-    year DECIMAL(4, 0)[primary key, note: '년도']
+  // Section 복합키 참조
+  course_id VARCHAR(8) [primary key, note: '강의 ID']
+  sec_id VARCHAR(8) [primary key, note: '분반 ID']
+  semester VARCHAR(6) [primary key, note: '학기']
+  year DECIMAL(4, 0) [primary key, note: '년도']
 }
 
-Ref:
-instructor.dept_name > department.dept_name
-Ref:
-student.dept_name > department.dept_name
-Ref:
-course.dept_name > department.dept_name
+Ref: instructor.dept_name > department.dept_name
+Ref: student.dept_name > department.dept_name
+Ref: course.dept_name > department.dept_name
 
-Ref:
-advisor.s_id > student.student_id
-Ref:
-advisor.i_id > instructor.instructor_id
+Ref: advisor.s_id > student.student_id
+Ref: advisor.i_id > instructor.instructor_id
 
-Ref:
-prereq.course_id > course.course_id
-Ref:
-prereq.prereq_id > course.course_id
+Ref: prereq.course_id > course.course_id
+Ref: prereq.prereq_id > course.course_id
 
 // Section은 Course와 Classroom을 참조
-Ref:
-section.course_id > course.course_id
-Ref:
-section.(building, room_number ) > classroom.(building, room_number )
+Ref: section.course_id > course.course_id
+Ref: section.(building, room_number) > classroom.(building, room_number)
 
 // Takes는 Student와 Section을 참조
-Ref:
-takes.student_id > student.student_id
-Ref:
-takes.(course_id, sec_id , semester , year ) > section.(course_id, sec_id , semester , year )
+Ref: takes.student_id > student.student_id
+Ref: takes.(course_id, sec_id, semester, year) > section.(course_id, sec_id, semester, year)
 
 // Teaches는 Instructor와 Section을 참조
-Ref:
-teaches.instructor_id > instructor.instructor_id
-Ref:
-teaches.(course_id, sec_id , semester , year ) > section.(course_id, sec_id , semester , year )
+Ref: teaches.instructor_id > instructor.instructor_id
+Ref: teaches.(course_id, sec_id, semester, year) > section.(course_id, sec_id, semester, year)
 ```
 
 </details>
