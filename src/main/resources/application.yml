@@ -10,12 +10,10 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${MYSQL_USER}
-    password: ${MYSQL_PASSWORD}
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         jdbc:
@@ -28,6 +26,9 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+    url: jdbc:mysql://${DB_HOST:localhost}:${MYSQL_PORT}/${MYSQL_DATABASE}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
+    user: ${MYSQL_USER}
+    password: ${MYSQL_PASSWORD}
 
 logging:
   level:
