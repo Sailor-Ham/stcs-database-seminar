@@ -11,8 +11,11 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_GUEST_USER=${MYSQL_GUEST_USER}
+      - MYSQL_GUEST_PASSWORD=${MYSQL_GUEST_PASSWORD}
     volumes:
       - ./mysql_data:/var/lib/mysql
+      - ./initdb:/docker-entrypoint-initdb.d
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
