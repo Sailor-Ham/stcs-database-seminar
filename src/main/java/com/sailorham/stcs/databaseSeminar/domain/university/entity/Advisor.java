@@ -23,15 +23,15 @@ import lombok.experimental.FieldDefaults;
 public class Advisor {
 
     @Id
-    @Column(name = "s_id", length = 5)
-    String sId;
+    @Column(name = "student_id", length = 5)
+    String studentId;
 
-    @MapsId("sId")
-    @JoinColumn(name = "s_id")
+    @MapsId("studentId")
+    @JoinColumn(name = "student_id")
     @OneToOne(fetch = FetchType.LAZY)
     Student student;
 
-    @JoinColumn(name = "i_id")
+    @JoinColumn(name = "instructor_id")
     @ManyToOne(fetch = FetchType.LAZY)
     Instructor instructor;
 

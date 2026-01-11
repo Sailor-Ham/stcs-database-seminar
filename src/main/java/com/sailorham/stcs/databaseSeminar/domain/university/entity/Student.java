@@ -1,5 +1,7 @@
 package com.sailorham.stcs.databaseSeminar.domain.university.entity;
 
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceException;
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceExceptionCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -7,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,13 +34,18 @@ public class Student {
     Department department;
 
     @Column(name = "tot_cred", precision = 3)
-    BigDecimal totCred;
+    Integer totCred;
 
     @Builder
-    public Student(String studentId, String name, Department department, BigDecimal totCred) {
+    public Student(String studentId, String name, Department department, Integer totCred) {
+
+        if (totCred != null && totCred < 0) {
+            throw new ServiceException(ServiceExceptionCode.INVALID_STUDENT_TOT_CRED);
+        }
+
         this.studentId = studentId;
         this.name = name;
         this.department = department;
-        this.totCred = totCred != null ? totCred : BigDecimal.ZERO;
+        this.totCred = totCred;
     }
 }

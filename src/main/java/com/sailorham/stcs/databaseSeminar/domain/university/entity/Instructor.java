@@ -1,5 +1,7 @@
 package com.sailorham.stcs.databaseSeminar.domain.university.entity;
 
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceException;
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceExceptionCode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,9 +39,14 @@ public class Instructor {
 
     @Builder
     public Instructor(String instructorId, String name, Department department, BigDecimal salary) {
+
+        if (salary != null && salary.compareTo(BigDecimal.valueOf(29000L)) <= 0) {
+            throw new ServiceException(ServiceExceptionCode.INVALID_INSTRUCTOR_SALARY);
+        }
+
         this.instructorId = instructorId;
         this.name = name;
         this.department = department;
-        this.salary = salary != null ? salary : BigDecimal.ZERO;
+        this.salary = salary;
     }
 }

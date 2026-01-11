@@ -3,7 +3,6 @@ package com.sailorham.stcs.databaseSeminar.domain.university.entity.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import java.time.LocalTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,6 +24,9 @@ public class TimeSlotId implements Serializable {
     @Column(name = "day", length = 1)
     String day;
 
-    @Column
-    LocalTime startTime;
+    @Column(name = "start_hr", precision = 2)
+    Integer startHr;
+
+    @Column(name = "start_min", precision = 2)
+    Integer startMin;
 }

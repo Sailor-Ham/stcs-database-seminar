@@ -1,5 +1,8 @@
 package com.sailorham.stcs.databaseSeminar.domain.university.entity;
 
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceException;
+import com.sailorham.stcs.databaseSeminar.common.exception.ServiceExceptionCode;
+import com.sailorham.stcs.databaseSeminar.domain.university.constrants.SectionConstants;
 import com.sailorham.stcs.databaseSeminar.domain.university.entity.id.SectionId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -51,6 +54,20 @@ public class Section {
         Classroom classroom,
         String timeSlotId
     ) {
+
+        if (semester == null || !SectionConstants.VALID_SEMESTERS.contains(semester)) {
+            throw new ServiceException(ServiceExceptionCode.INVALID_SECTION_SEMESTER);
+        }
+
+        if (year != null) {
+            boolean isTooOld = year.compareTo(BigDecimal.valueOf(1701)) <= 0;
+            boolean isTooFuture = year.compareTo(BigDecimal.valueOf(2100)) >= 0;
+
+            if (isTooOld || isTooFuture) {
+                throw new ServiceException(ServiceExceptionCode.INVALID_SECTION_YEAR);
+            }
+        }
+
         this.sectionId = new SectionId(course.getCourseId(), secId, semester, year);
         this.course = course;
         this.classroom = classroom;

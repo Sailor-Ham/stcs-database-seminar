@@ -5,7 +5,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,11 +22,11 @@ public class Classroom {
     ClassroomId classroomId;
 
     @Column(name = "capacity", precision = 4)
-    BigDecimal capacity;
+    Integer capacity;
 
     @Builder
-    public Classroom(String building, String roomNumber, BigDecimal capacity) {
+    public Classroom(String building, String roomNumber, Integer capacity) {
         this.classroomId = new ClassroomId(building, roomNumber);
-        this.capacity = capacity != null ? capacity : BigDecimal.ZERO;
+        this.capacity = capacity;
     }
 }
