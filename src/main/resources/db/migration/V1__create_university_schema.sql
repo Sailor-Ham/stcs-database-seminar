@@ -56,7 +56,7 @@ CREATE TABLE instructor
     instructor_id VARCHAR(5)  NOT NULL COMMENT '교수 ID',
     name          VARCHAR(20) NOT NULL COMMENT '교수명',
     dept_name     VARCHAR(20) COMMENT '학과명',
-    salary        DECIMAL(8, 2) COMMENT '월급',
+    salary        DECIMAL(8, 2) COMMENT '연봉',
 
     PRIMARY KEY pk_instructor (instructor_id),
 
