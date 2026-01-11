@@ -21,7 +21,7 @@ public class Classroom {
     @EmbeddedId
     ClassroomId classroomId;
 
-    @Column(name = "capacity", precision = 4)
+    @Column(name = "capacity")
     Integer capacity;
 
     @Builder

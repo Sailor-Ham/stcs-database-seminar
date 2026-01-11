@@ -33,7 +33,7 @@ public class Course {
     @ManyToOne(fetch = FetchType.LAZY)
     Department department;
 
-    @Column(name = "credits", precision = 2)
+    @Column(name = "credits")
     Integer credits;
 
     @Builder

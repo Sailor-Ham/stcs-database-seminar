@@ -3,7 +3,6 @@ package com.sailorham.stcs.databaseSeminar.domain.university.entity.id;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -28,6 +27,6 @@ public class SectionId implements Serializable {
     @Column(name = "semester", length = 6)
     String semester;
 
-    @Column(name = "year", precision = 4)
-    BigDecimal year;
+    @Column(name = "year")
+    Integer year;
 }

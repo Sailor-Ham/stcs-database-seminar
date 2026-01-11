@@ -13,7 +13,6 @@ import jakarta.persistence.JoinColumns;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,7 +49,7 @@ public class Section {
         Course course,
         String secId,
         String semester,
-        BigDecimal year,
+        Integer year,
         Classroom classroom,
         String timeSlotId
     ) {
@@ -60,8 +59,8 @@ public class Section {
         }
 
         if (year != null) {
-            boolean isTooOld = year.compareTo(BigDecimal.valueOf(1701)) <= 0;
-            boolean isTooFuture = year.compareTo(BigDecimal.valueOf(2100)) >= 0;
+            boolean isTooOld = year <= 1701;
+            boolean isTooFuture = year >= 2100;
 
             if (isTooOld || isTooFuture) {
                 throw new ServiceException(ServiceExceptionCode.INVALID_SECTION_YEAR);

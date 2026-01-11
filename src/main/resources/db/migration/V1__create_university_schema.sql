@@ -3,7 +3,7 @@ CREATE TABLE classroom
 (
     building    VARCHAR(15) NOT NULL COMMENT '건물명',
     room_number VARCHAR(7)  NOT NULL COMMENT '강의실 번호',
-    capacity    DECIMAL(4, 0) COMMENT '수용 인원',
+    capacity    INTEGER COMMENT '수용 인원',
 
     PRIMARY KEY pk_classroom (building, room_number)
 ) ENGINE = InnoDB
@@ -34,7 +34,7 @@ CREATE TABLE course
     course_id VARCHAR(8)  NOT NULL COMMENT '강의 ID',
     title     VARCHAR(50) NOT NULL COMMENT '강의명',
     dept_name VARCHAR(20) COMMENT '학과명',
-    credits   DECIMAL(2, 0) COMMENT '학점',
+    credits   INTEGER COMMENT '학점',
 
     PRIMARY KEY pk_course (course_id),
 
@@ -75,10 +75,10 @@ CREATE TABLE instructor
 -- 개설 강좌 테이블
 CREATE TABLE section
 (
-    course_id    VARCHAR(8)    NOT NULL COMMENT '강의 ID',
-    sec_id       VARCHAR(8)    NOT NULL COMMENT '분반 ID',
-    semester     VARCHAR(6)    NOT NULL COMMENT '학기',
-    year         DECIMAL(4, 0) NOT NULL COMMENT '년도',
+    course_id    VARCHAR(8) NOT NULL COMMENT '강의 ID',
+    sec_id       VARCHAR(8) NOT NULL COMMENT '분반 ID',
+    semester     VARCHAR(6) NOT NULL COMMENT '학기',
+    year         INTEGER    NOT NULL COMMENT '년도',
     building     VARCHAR(15) COMMENT '건물명',
     room_number  VARCHAR(7) COMMENT '강의실 번호',
     time_slot_id VARCHAR(4) COMMENT '수업 교시 ID (논리적 참조)',
@@ -105,11 +105,11 @@ CREATE TABLE section
 -- 강의 담당 테이블
 CREATE TABLE teaches
 (
-    instructor_id VARCHAR(5)    NOT NULL COMMENT '교수 ID',
-    course_id     VARCHAR(8)    NOT NULL COMMENT '강의 ID',
-    sec_id        VARCHAR(8)    NOT NULL COMMENT '분반 ID',
-    semester      VARCHAR(6)    NOT NULL COMMENT '학기',
-    year          DECIMAL(4, 0) NOT NULL COMMENT '년도',
+    instructor_id VARCHAR(5) NOT NULL COMMENT '교수 ID',
+    course_id     VARCHAR(8) NOT NULL COMMENT '강의 ID',
+    sec_id        VARCHAR(8) NOT NULL COMMENT '분반 ID',
+    semester      VARCHAR(6) NOT NULL COMMENT '학기',
+    year          INTEGER    NOT NULL COMMENT '년도',
 
     PRIMARY KEY pk_teaches (instructor_id, course_id, sec_id, semester, year),
 
@@ -133,7 +133,7 @@ CREATE TABLE student
     student_id VARCHAR(5)  NOT NULL COMMENT '학생 ID',
     name       VARCHAR(20) NOT NULL COMMENT '학생명',
     dept_name  VARCHAR(20) COMMENT '학과명',
-    tot_cred   DECIMAL(3, 0) COMMENT '총 이수 학점',
+    tot_cred   INTEGER COMMENT '총 이수 학점',
 
     PRIMARY KEY pk_student (student_id),
 
@@ -152,11 +152,11 @@ CREATE TABLE student
 -- 수강 신청 테이블
 CREATE TABLE takes
 (
-    student_id VARCHAR(5)    NOT NULL COMMENT '학생 ID',
-    course_id  VARCHAR(8)    NOT NULL COMMENT '강의 ID',
-    sec_id     VARCHAR(8)    NOT NULL COMMENT '분반 ID',
-    semester   VARCHAR(6)    NOT NULL COMMENT '학기',
-    year       DECIMAL(4, 0) NOT NULL COMMENT '년도',
+    student_id VARCHAR(5) NOT NULL COMMENT '학생 ID',
+    course_id  VARCHAR(8) NOT NULL COMMENT '강의 ID',
+    sec_id     VARCHAR(8) NOT NULL COMMENT '분반 ID',
+    semester   VARCHAR(6) NOT NULL COMMENT '학기',
+    year       INTEGER    NOT NULL COMMENT '년도',
     grade      VARCHAR(2) COMMENT '성적',
 
     PRIMARY KEY pk_takes (student_id, course_id, sec_id, semester, year),
@@ -200,12 +200,12 @@ CREATE TABLE advisor
 -- 시간표 테이블 - 논리적 참조용
 CREATE TABLE time_slot
 (
-    time_slot_id VARCHAR(4)    NOT NULL COMMENT '수업 교시 ID',
-    day          VARCHAR(1)    NOT NULL COMMENT '요일',
-    start_hr     DECIMAL(2, 0) NOT NULL COMMENT '시작 시',
-    start_min    DECIMAL(2, 0) NOT NULL COMMENT '시작 분',
-    end_hr       DECIMAL(2, 0) COMMENT '종료 시',
-    end_min      DECIMAL(2, 0) COMMENT '종료 분',
+    time_slot_id VARCHAR(4) NOT NULL COMMENT '수업 교시 ID',
+    day          VARCHAR(1) NOT NULL COMMENT '요일',
+    start_hr     INTEGER    NOT NULL COMMENT '시작 시',
+    start_min    INTEGER    NOT NULL COMMENT '시작 분',
+    end_hr       INTEGER COMMENT '종료 시',
+    end_min      INTEGER COMMENT '종료 분',
 
     PRIMARY KEY pk_time_slot (time_slot_id, day, start_hr, start_min),
 
