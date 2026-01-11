@@ -1,9 +1,10 @@
 package com.sailorham.stcs.databaseSeminar.global.config;
 
+import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,11 +13,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 @Configuration
 public class DataSourceConfig {
 
-    @Primary
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.primary")
+    @ConfigurationProperties("spring.datasource.primary")
+    public DataSourceProperties mainDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Bean
+    @Primary
     public DataSource mainDataSource() {
-        return DataSourceBuilder.create().build();
+        return mainDataSourceProperties()
+            .initializeDataSourceBuilder()
+            .type(HikariDataSource.class)
+            .build();
     }
 
     @Primary
@@ -26,9 +35,17 @@ public class DataSourceConfig {
     }
 
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.readonly")
+    @ConfigurationProperties("spring.datasource.readonly")
+    public DataSourceProperties readonlyDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Bean
     public DataSource readOnlyDataSource() {
-        return DataSourceBuilder.create().build();
+        return readonlyDataSourceProperties()
+            .initializeDataSourceBuilder()
+            .type(HikariDataSource.class)
+            .build();
     }
 
     @Bean(name = "readOnlyJdbcTemplate")
