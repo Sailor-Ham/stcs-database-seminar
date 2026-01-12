@@ -1,3 +1,10 @@
+server:
+  port: 9090
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
