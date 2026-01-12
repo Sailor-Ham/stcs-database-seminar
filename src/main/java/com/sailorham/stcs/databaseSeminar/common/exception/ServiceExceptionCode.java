@@ -25,6 +25,8 @@ public enum ServiceExceptionCode {
     INVALID_STUDENT_TOT_CRED(HttpStatus.BAD_REQUEST, "총 이수 학점은 0 이상이어야 합니다."),
 
     INVALID_TIME_FORMAT(HttpStatus.BAD_REQUEST, "시간은 0~23, 분은 0~59 사이여야 합니다."),
+
+    INVALID_SQL_SYNTAX(HttpStatus.BAD_REQUEST, "SQL 문법이 올바르지 않거나 실행할 수 없는 쿼리입니다."),
     ;
 
     final HttpStatus status;
