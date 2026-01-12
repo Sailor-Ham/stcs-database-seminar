@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class SqlExecutorService {
 
     private final JdbcTemplate jdbcTemplate;
 
-    // TODO: 읽기 전용 유저가 실행할 수 있도록 수정해야함
+    public SqlExecutorService(@Qualifier("readOnlyJdbcTemplate") JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
     public SqlResponse execute(SqlRequest request) {
 
         String sql = request.sql().trim();
