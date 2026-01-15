@@ -38,5 +38,7 @@ spring:
     password: ${MYSQL_PASSWORD}
 
 logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} --- [%15.15t] %-40.40logger{39} : %m%n"
   level:
     root: INFO
