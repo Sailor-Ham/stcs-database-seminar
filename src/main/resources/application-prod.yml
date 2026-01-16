@@ -19,9 +19,9 @@ spring:
 
 logging:
   file:
-    name: logs/stcs-backend.log
+    name: /app/logs/stcs-backend.log
   logback:
-    rolling-policy:
+    rollingpolicy:
       max-file-size: 10MB
       max-history: 30
       file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.gz
