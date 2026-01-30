@@ -27,6 +27,7 @@ public enum ServiceExceptionCode {
     INVALID_TIME_FORMAT(HttpStatus.BAD_REQUEST, "시간은 0~23, 분은 0~59 사이여야 합니다."),
 
     INVALID_SQL_SYNTAX(HttpStatus.BAD_REQUEST, "SQL 문법이 올바르지 않거나 실행할 수 없는 쿼리입니다."),
+    SQL_EXECUTION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "SQL 실행 중 오류가 발생했습니다."),
 
     SCHEMA_RETRIEVAL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 스키마 정보를 가져오는데 실패했습니다."),
     ;
