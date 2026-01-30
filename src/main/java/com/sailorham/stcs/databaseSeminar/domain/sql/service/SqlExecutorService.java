@@ -9,6 +9,7 @@ import com.sailorham.stcs.databaseSeminar.domain.sql.dto.TableSchemaResponse;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,12 +40,28 @@ public class SqlExecutorService {
         log.info("Execute sql: {}", sql);
 
         try {
-            List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql);
+            return jdbcTemplate.query(sql, rs -> {
+                ResultSetMetaData metaData = rs.getMetaData();
+                int columnCount = metaData.getColumnCount();
 
-            List<String> columns = extractColumns(rows);
+                List<String> columns = new ArrayList<>();
+                for (int i = 1; i <= columnCount; i++) {
+                    columns.add(metaData.getColumnLabel(i));
+                }
 
-            return new SqlResponse(sql, rows.size(), columns, rows);
+                List<List<Object>> rows = new ArrayList<>();
+                while (rs.next()) {
 
+                    List<Object> row = new ArrayList<>();
+                    for (int i = 1; i <= columnCount; i++) {
+                        row.add(rs.getObject(i));
+                    }
+
+                    rows.add(row);
+                }
+
+                return SqlResponse.of(sql, columns, rows);
+            });
         } catch (DataAccessException e) {
             log.error("SQL Execution Failed: {}", e.getMessage());
             throw new ServiceException(ServiceExceptionCode.INVALID_SQL_SYNTAX);
