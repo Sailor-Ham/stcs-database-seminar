@@ -18,8 +18,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jsqlparser.parser.CCJSqlParserUtil;
+import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.Statement;
+import net.sf.jsqlparser.statement.select.PlainSelect;
+import net.sf.jsqlparser.statement.select.Select;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +46,11 @@ public class SqlExecutorService {
         String sql = request.sql().trim();
         log.info("Execute sql: {}", sql);
 
+        Map<String, String> tableAliasMap = extractTableAliases(sql);
+
         try {
             return jdbcTemplate.query(sql, rs -> {
+
                 ResultSetMetaData metaData = rs.getMetaData();
                 int columnCount = metaData.getColumnCount();
 
@@ -55,11 +64,22 @@ public class SqlExecutorService {
                 List<String> columns = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
 
-                    String tableName = metaData.getTableName(i);
                     String label = metaData.getColumnLabel(i);
+                    String originTableName = metaData.getTableName(i);
 
-                    if (labelCounts.get(label) > 1 && tableName != null && !tableName.isEmpty()) {
-                        columns.add(tableName + "." + label);
+                    String displayTableName = originTableName;
+
+                    if (originTableName != null &&
+                        tableAliasMap.containsKey(originTableName.toUpperCase())
+                    ) {
+                        displayTableName = tableAliasMap.get(originTableName.toUpperCase());
+                    }
+
+                    if (labelCounts.get(label) > 1 &&
+                        displayTableName != null &&
+                        !displayTableName.isEmpty()
+                    ) {
+                        columns.add(displayTableName + "." + label);
                     } else {
                         columns.add(label);
                     }
@@ -78,9 +98,15 @@ public class SqlExecutorService {
 
                 return SqlResponse.of(sql, columns, rows);
             });
+        } catch (BadSqlGrammarException e) {
+            log.info("Bad SQL Grammar: {}", e.getMessage());
+            throw new ServiceException(
+                ServiceExceptionCode.INVALID_SQL_SYNTAX,
+                Objects.requireNonNull(e.getSQLException()).getMessage()
+            );
         } catch (DataAccessException e) {
             log.error("SQL Execution Failed: {}", e.getMessage());
-            throw new ServiceException(ServiceExceptionCode.INVALID_SQL_SYNTAX);
+            throw new ServiceException(ServiceExceptionCode.SQL_EXECUTION_FAILED);
         }
     }
 
@@ -169,5 +195,43 @@ public class SqlExecutorService {
         } else {
             return upperType;
         }
+    }
+
+    private Map<String, String> extractTableAliases(String sql) {
+
+        Map<String, String> tableAliasMap = new HashMap<>();
+
+        try {
+
+            Statement statement = CCJSqlParserUtil.parse(sql);
+
+            if (statement instanceof Select select) {
+                if (select.getSelectBody() instanceof PlainSelect plainSelect) {
+
+                    if (plainSelect.getFromItem() instanceof Table table) {
+                        if (table.getAlias() != null) {
+                            tableAliasMap
+                                .put(table.getName().toUpperCase(), table.getAlias().getName());
+                        }
+                    }
+
+                    if (plainSelect.getJoins() != null) {
+                        for (var join : plainSelect.getJoins()) {
+                            if (join.getRightItem() instanceof Table table) {
+                                if (table.getAlias() != null) {
+                                    tableAliasMap
+                                        .put(table.getName().toUpperCase(),
+                                            table.getAlias().getName());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            log.warn("SQL parsing failed for Alias extraction. Fallback to default behavior.", e);
+        }
+
+        return tableAliasMap;
     }
 }
