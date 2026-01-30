@@ -13,6 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -44,9 +45,24 @@ public class SqlExecutorService {
                 ResultSetMetaData metaData = rs.getMetaData();
                 int columnCount = metaData.getColumnCount();
 
+                Map<String, Integer> labelCounts = new HashMap<>();
+                for (int i = 1; i <= columnCount; i++) {
+
+                    String label = metaData.getColumnLabel(i);
+                    labelCounts.put(label, labelCounts.getOrDefault(label, 0) + 1);
+                }
+
                 List<String> columns = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
-                    columns.add(metaData.getColumnLabel(i));
+
+                    String tableName = metaData.getTableName(i);
+                    String label = metaData.getColumnLabel(i);
+
+                    if (labelCounts.get(label) > 1 && tableName != null && !tableName.isEmpty()) {
+                        columns.add(tableName + "." + label);
+                    } else {
+                        columns.add(label);
+                    }
                 }
 
                 List<List<Object>> rows = new ArrayList<>();
